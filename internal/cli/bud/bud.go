@@ -16,6 +16,7 @@ import (
 	"github.com/livebud/bud/framework/app"
 	"github.com/livebud/bud/framework/controller"
 	"github.com/livebud/bud/framework/public"
+	"github.com/livebud/bud/framework/routes"
 	"github.com/livebud/bud/framework/transform/transformrt"
 	"github.com/livebud/bud/framework/view"
 	"github.com/livebud/bud/framework/view/dom"
@@ -143,6 +144,7 @@ func FileSystem(log log.Interface, module *gomod.Module, flag *framework.Flag) (
 	genfs.FileGenerator("bud/internal/app/controller/controller.go", controller.New(injector, module, parser))
 	genfs.FileGenerator("bud/internal/app/view/view.go", view.New(module, transforms, flag))
 	genfs.FileGenerator("bud/internal/app/public/public.go", public.New(flag))
+	genfs.FileGenerator("bud/internal/app/routes/routes.go", routes.New(injector, module, parser))
 	return genfs, nil
 }
 
