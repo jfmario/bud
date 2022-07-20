@@ -1,16 +1,14 @@
-
 package routes
 
 import (
-
 	"io/fs"
 	"path"
 
 	"github.com/livebud/bud/internal/bail"
+	"github.com/livebud/bud/internal/valid"
 	"github.com/livebud/bud/package/di"
 	"github.com/livebud/bud/package/gomod"
 	"github.com/livebud/bud/package/parser"
-	"github.com/livebud/bud/internal/valid"
 	"github.com/livebud/bud/package/vfs"
 )
 
@@ -22,7 +20,7 @@ func Load(fsys fs.FS, injector *di.Injector, module *gomod.Module, parser *parse
 		return nil, fs.ErrNotExist
 	}
 	loader := &loader{
-		fsys: fsys,
+		fsys:   fsys,
 		module: module,
 		parser: parser,
 	}
@@ -32,7 +30,7 @@ func Load(fsys fs.FS, injector *di.Injector, module *gomod.Module, parser *parse
 // loader struct
 type loader struct {
 	bail.Struct
-	fsys fs.FS
+	fsys   fs.FS
 	module *gomod.Module
 	parser *parser.Parser
 }
@@ -70,7 +68,7 @@ func (l *loader) loadRoutesFuncs(routesPath, prefix string, routesFuncs []*Route
 			continue
 		}
 		if de.IsDir() && valid.Dir(de.Name()) {
-			routesFuncs = l.loadRoutesFuncs(path.Join(routesPath, de.Name()), prefix + "/" + de.Name(), routesFuncs)
+			routesFuncs = l.loadRoutesFuncs(path.Join(routesPath, de.Name()), prefix+"/"+de.Name(), routesFuncs)
 		}
 	}
 

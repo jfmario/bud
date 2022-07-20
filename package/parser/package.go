@@ -144,7 +144,7 @@ func (pkg *Package) PublicFunctions() (fns []*Function) {
 
 // PublicFunction returns a public function by name
 func (pkg *Package) PublicFunction(name string) *Function {
-	
+
 	for _, fn := range pkg.PublicFunctions() {
 		if fn.Name() == name {
 			return fn

@@ -15,9 +15,16 @@ func New() *Router {
 	}
 }
 
+type methodRouteHandler struct {
+	Method  string
+	Route   string
+	Handler http.Handler
+}
+
 // Router struct
 type Router struct {
-	methods map[string]radix.Tree
+	methods             map[string]radix.Tree
+	methodRouteHandlers []methodRouteHandler
 }
 
 var _ http.Handler = (*Router)(nil)
@@ -34,6 +41,11 @@ func (rt *Router) add(method, route string, handler http.Handler) error {
 	if _, ok := rt.methods[method]; !ok {
 		rt.methods[method] = radix.New()
 	}
+	rt.methodRouteHandlers = append(rt.methodRouteHandlers, methodRouteHandler{
+		Method:  method,
+		Route:   route,
+		Handler: handler,
+	})
 	return rt.methods[method].Insert(route, handler)
 }
 
@@ -60,6 +72,15 @@ func (rt *Router) Patch(route string, handler http.Handler) error {
 // Delete route
 func (rt *Router) Delete(route string, handler http.Handler) error {
 	return rt.add(http.MethodDelete, route, handler)
+}
+
+// AddSubrouter "mounts" all handlers from the subrouter to the main router
+// at the given prefix
+func (rt *Router) AddSubrouter(prefix string, subrouter *Router) error {
+	for _, mrh := range subrouter.methodRouteHandlers {
+		rt.add(mrh.Method, prefix+mrh.Route, mrh.Handler)
+	}
+	return nil
 }
 
 func (rt *Router) ServeHTTP(w http.ResponseWriter, r *http.Request) {

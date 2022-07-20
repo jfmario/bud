@@ -1,10 +1,9 @@
-
 package routes
 
 type State struct {
 	ControllerImport string
-	HasRoutes bool
-	RoutesFuncs []*RoutesFunc
+	HasRoutes        bool
+	RoutesFuncs      []*RoutesFunc
 }
 
 type RoutesFunc struct {

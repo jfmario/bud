@@ -15,8 +15,22 @@ import (
 )
 
 
-func Routes(router *router.Router, cmap *controller.Controller) {
+func Routes(r *router.Router, cmap *controller.Controller) {
+
+    r.Get("/", cmap.Index)
+    r.Get("/a", cmap.Index)
+    r.Get("/a/b", cmap.Index)
+
     {{ range $index, $rf := $.RoutesFuncs }}
-    routes_{{ $index }}.Routes(router, cmap)
+
+    {{ if $rf.Prefix }}
+    // prefix: {{ $rf.Prefix }}
+    subRouter_{{ $index }} := router.New()
+    routes_{{ $index }}.Routes(subRouter_{{ $index }}, cmap)
+    r.AddSubrouter("{{ $rf.Prefix }}", subRouter_{{ $index }})
+    {{ else }}
+    routes_{{ $index }}.Routes(r, cmap)
+    {{ end }}
+
     {{ end }}
 }
