@@ -142,6 +142,18 @@ func (pkg *Package) PublicFunctions() (fns []*Function) {
 	return fns
 }
 
+// PublicFunction returns a public function by name
+func (pkg *Package) PublicFunction(name string) *Function {
+	
+	for _, fn := range pkg.PublicFunctions() {
+		if fn.Name() == name {
+			return fn
+		}
+	}
+
+	return nil
+}
+
 // PublicMethods returns all public methods in the package
 func (pkg *Package) PublicMethods() (fns []*Function) {
 	for _, file := range pkg.Files() {

@@ -194,6 +194,11 @@ func (a *appServer) Run(ctx context.Context) error {
 		a.log.Debug("run: published event", "event", "app:error")
 		return err
 	}
+	if err := a.genfs.Sync("bud/package"); err != nil {
+		a.bus.Publish("app:error", []byte(err.Error()))
+		a.log.Debug("run: published event", "event", "app:error")
+		return err
+	}
 	// Build the app
 	if err := a.builder.Build(ctx, "bud/internal/app/main.go", "bud/app"); err != nil {
 		a.bus.Publish("app:error", []byte(err.Error()))

@@ -39,8 +39,9 @@ func (l *loader) Load() (state *State, err error) {
 	state = new(State)
 	// Ensure the web files exist
 	exist, err := vfs.SomeExist(l.fsys,
-		"bud/internal/app/controller/controller.go",
+		"bud/package/controller/controller.go",
 		"bud/internal/app/public/public.go",
+		"bud/internal/app/routes/routes.go",
 		"bud/internal/app/view/view.go",
 	)
 	if err != nil {
@@ -68,11 +69,16 @@ func (l *loader) Load() (state *State, err error) {
 		l.imports.AddNamed("view", l.module.Import("bud/internal/app/view"))
 	}
 	// Load the controllers
-	if exist["bud/internal/app/controller/controller.go"] {
+	if exist["bud/package/controller/controller.go"] {
 		state.Actions = l.loadControllerActions()
 		if len(state.Actions) > 0 {
-			l.imports.AddNamed("controller", l.module.Import("bud/internal/app/controller"))
+			l.imports.AddNamed("controller", l.module.Import("bud/package/controller"))
 		}
+	}
+	// Load the routes
+	if exist["bud/internal/app/routes/routes.go"] {
+		state.HasRoutes = true
+		l.imports.AddNamed("routes", l.module.Import("bud/internal/app/routes"))
 	}
 	// state.Command = l.loadRoot("command")
 	// Load the imports

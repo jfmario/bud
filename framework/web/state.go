@@ -7,6 +7,7 @@ type State struct {
 
 	Actions   []*Action
 	HasPublic bool
+	HasRoutes bool
 	HasView   bool
 
 	// Show the welcome page

@@ -140,11 +140,11 @@ func FileSystem(log log.Interface, module *gomod.Module, flag *framework.Flag) (
 		return nil, err
 	}
 	genfs.FileGenerator("bud/internal/app/main.go", app.New(injector, module, flag))
+	genfs.FileGenerator("bud/internal/app/routes/routes.go", routes.New(injector, module, parser))
 	genfs.FileGenerator("bud/internal/app/web/web.go", web.New(module, parser))
-	genfs.FileGenerator("bud/internal/app/controller/controller.go", controller.New(injector, module, parser))
+	genfs.FileGenerator("bud/package/controller/controller.go", controller.New(injector, module, parser))
 	genfs.FileGenerator("bud/internal/app/view/view.go", view.New(module, transforms, flag))
 	genfs.FileGenerator("bud/internal/app/public/public.go", public.New(flag))
-	genfs.FileGenerator("bud/internal/app/routes/routes.go", routes.New(injector, module, parser))
 	return genfs, nil
 }
 

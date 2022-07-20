@@ -27,7 +27,14 @@ func New(
 	welcome welcome.Middleware,
 	{{- end }}
 ) *Server {
+	
 	{{- if $.Actions }}
+
+	// custom routes
+	{{- if $.HasRoutes }}
+	routes.Routes(router, controller)
+	{{- end }}
+	
 	// Action routing
 	{{- range $action := $.Actions }}
 	router.{{ $action.Method }}(`{{ $action.Route }}`, controller.{{ $action.CallName }})

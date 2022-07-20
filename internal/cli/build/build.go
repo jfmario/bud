@@ -48,6 +48,9 @@ func (c *Command) Run(ctx context.Context) error {
 	if err := genfs.Sync("bud/internal/app"); err != nil {
 		return err
 	}
+	if err := genfs.Sync("bud/package"); err != nil {
+		return err
+	}
 	builder := gobuild.New(module)
 	return builder.Build(ctx, "bud/internal/app/main.go", "bud/app")
 }

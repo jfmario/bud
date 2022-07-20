@@ -65,3 +65,7 @@ func firstRune(s string) rune {
 func CommandFile(name string) bool {
 	return !invalidGoFile(name)
 }
+
+func RoutesFile(name string) bool {
+	return !invalidGoFile(name)
+}

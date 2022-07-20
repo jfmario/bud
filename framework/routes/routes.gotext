@@ -1,3 +1,22 @@
 package routes
 
-// Hello
+// GENERATED. DO NOT EDIT.
+
+import (
+
+    "github.com/livebud/bud/package/router"
+    "{{ $.ControllerImport }}"
+
+    {{ if $.HasRoutes }}
+    {{- range $index, $rf := $.RoutesFuncs }}
+	routes_{{ $index }} "{{ $rf.Import }}"
+	{{- end }}
+    {{- end }}
+)
+
+
+func Routes(router *router.Router, cmap *controller.Controller) {
+    {{ range $index, $rf := $.RoutesFuncs }}
+    routes_{{ $index }}.Routes(router, cmap)
+    {{ end }}
+}
