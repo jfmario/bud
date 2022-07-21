@@ -73,7 +73,7 @@ func (l *loader) loadRoutesFuncs(routesPath, prefix string, routesFuncs []*Route
 	}
 
 	if !shouldParse {
-		return []*RoutesFunc{}
+		return routesFuncs
 	}
 
 	pkg, err := l.parser.Parse(routesPath)
@@ -84,18 +84,18 @@ func (l *loader) loadRoutesFuncs(routesPath, prefix string, routesFuncs []*Route
 	// look for function called Routes
 	rawRoutesFunc := pkg.PublicFunction("Routes")
 	if rawRoutesFunc == nil {
-		return []*RoutesFunc{}
+		return routesFuncs
 	}
 
 	// must have 2 params
 	rawRoutesFuncParams := rawRoutesFunc.Params()
 	if len(rawRoutesFuncParams) != 2 {
-		return []*RoutesFunc{}
+		return routesFuncs
 	}
 
 	// types must be *router.Router and *controller.Controller
 	if rawRoutesFuncParams[0].Type().String() != "*router.Router" || rawRoutesFuncParams[1].Type().String() != "*controller.Controller" {
-		return []*RoutesFunc{}
+		return routesFuncs
 	}
 
 	importPath, err := pkg.Import()
