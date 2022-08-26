@@ -3,6 +3,7 @@ package parser
 import (
 	"fmt"
 	"go/ast"
+	"strings"
 
 	"github.com/livebud/bud/internal/gois"
 )
